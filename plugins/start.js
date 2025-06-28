@@ -1,6 +1,7 @@
 const { Telegraf, Markup } = require('telegraf');
-const bot = new Telegraf('7704243997:AAGX5okHesgLEzU0BzJ_bWKSRGzps6RNfc4');
-const config = require('../config'); // asumsi config.js ada di root
+const BOT_UTAMA_TOKEN = '7704243997:AAGX5okHesgLEzU0BzJ_bWKSRGzps6RNfc4'; // ganti sesuai bot utama lu
+const config = require('../config');
+const CHANNEL_ID = config.FORCE_SUB_CHANNEL; 
 const fs = require('fs');
 const path = require('path');
 
@@ -40,13 +41,19 @@ function getGreeting() {
 
 async function checkJoinChannel(ctx) {
   try {
-    const member = await ctx.telegram.getChatMember(config.FORCE_SUB_CHANNEL, ctx.from.id);
-    return ['member', 'administrator', 'creator'].includes(member.status);
+    const res = await axios.post(`https://api.telegram.org/bot${BOT_UTAMA_TOKEN}/getChatMember`, {
+      chat_id: CHANNEL_ID,
+      user_id: ctx.from.id
+    });
+
+    const status = res.data.result?.status;
+    return ['member', 'administrator', 'creator'].includes(status);
   } catch (err) {
-    console.error('❌ Gagal cek join channel:', err.message);
+    console.error('❌ Gagal cek join channel:', err.response?.data?.description || err.message);
     return false;
   }
 }
+
 
 module.exports = (bot) => {
   // Middleware private
