@@ -57,7 +57,7 @@ Silakan pencet tombol di bawah untuk mulai:
     parse_mode: 'Markdown',
     reply_markup: {
       inline_keyboard: [
-        [{ text: "ᴍᴇɴᴜ", callback_data: "allmenu" }],
+        [{ text: "ᴍᴇɴᴜ", callback_data: "maiinmenu" }],
         [{ text: "ᴏᴡɴᴇʀ", url: "https://t.me/VellzXyrine" }]
       ]
     }
