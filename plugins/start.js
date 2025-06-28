@@ -1,5 +1,4 @@
 const { Telegraf, Markup } = require('telegraf');
-const { Telegraf, Markup } = require('telegraf');
 const mainBot = new Telegraf('7704243997:AAGX5okHesgLEzU0BzJ_bWKSRGzps6RNfc4'); 
 const config = require('./config');
 const fs = require('fs');
