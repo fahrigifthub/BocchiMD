@@ -91,7 +91,6 @@ Halo ${ctx.from.first_name}, kamu harus join channel kami dulu ya untuk pakai bo
 
   // Jika grup
   if (chatType === 'supergroup' || chatType === 'group') {
-  if (chatType === 'supergroup' || chatType === 'group') {
   if (!joined) {
     try {
       const user = await ctx.telegram.getChatMember(ctx.chat.id, ctx.from.id);
