@@ -48,7 +48,7 @@ function getGreeting() {
 }
 
 const axios = require('axios'); // tambahin ini kalau belum
-const CHECKER_API = 'http://fernine.idbothost.my.id/api/check'; // ganti ke URL checker lu
+const CHECKER_API = 'http://fernine.idbothost.my.id:4002/api/check'; // ganti ke URL checker lu
 
 async function checkJoinChannel(ctx) {
   try {
