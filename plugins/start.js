@@ -82,7 +82,7 @@ Halo ${ctx.from.first_name}, kamu harus join channel kami dulu ya untuk pakai bo
         caption: text,
         parse_mode: 'Markdown',
         ...Markup.inlineKeyboard([
-          Markup.button.url('Join Channel', `https://t.me/${config.FORCE_SUB_CHANNEL.replace(/^@/, '')}`)
+          Markup.button.url('Join Channel', `https://t.me/FernineInformation`)
         ])
       });
     }
@@ -106,7 +106,7 @@ Halo ${ctx.from.first_name}, kamu harus join channel kami dulu ya untuk pakai bo
         await ctx.reply(
           `Halo ${ctx.from.first_name}, kamu belum join channel. Kamu di-mute dulu ya sampai kamu join.`,
           Markup.inlineKeyboard([
-            [Markup.button.url('Join Channel', `https://t.me/${config.FORCE_SUB_CHANNEL.replace(/^@/, '')}`)],
+            [Markup.button.url('Join Channel', `https://t.me/FernineInformation`)],
             [Markup.button.callback('Unmute Saya', 'check_sub')]
           ])
         );
@@ -134,7 +134,7 @@ Kamu belum join channel kami, silakan join dulu ya.
       {
         parse_mode: 'Markdown',
         reply_markup: Markup.inlineKeyboard([
-          Markup.button.url('Join Channel', `https://t.me/${config.FORCE_SUB_CHANNEL.replace(/^@/, '')}`),
+          Markup.button.url('Join Channel', `https://t.me/FernineInformation`),
           Markup.button.callback('Cek Lagi', 'check_sub')
         ])
       }
@@ -166,7 +166,7 @@ module.exports = (bot) => {
         caption: `\`\`\`\nHalo ${ctx.from.first_name}, kamu harus join channel kami dulu ya untuk pakai bot ini.\n\`\`\``,
         parse_mode: 'Markdown',
         ...Markup.inlineKeyboard([
-          Markup.button.url('Join Channel', `https://t.me/${config.FORCE_SUB_CHANNEL.replace(/^@/, '')}`),
+          Markup.button.url('Join Channel', `https://t.me/FernineInformation`),
           Markup.button.callback('Cek Lagi', 'check_sub')
         ])
       });
