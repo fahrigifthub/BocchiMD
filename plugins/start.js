@@ -118,12 +118,6 @@ bot.use(async (ctx, next) => {
   } catch (err) {
     console.error('Gagal mute user:', err.response?.description || err.message || err);
   }
-
-    return;
-  }
-  return next();
-} 
-  return next();
 });
 
 // Handler callback: Unmute setelah join
