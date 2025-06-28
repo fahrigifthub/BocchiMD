@@ -1,9 +1,9 @@
 const { Markup } = require('telegraf');
-const config = require('../config');
+const config = require('./config');
 const fs = require('fs');
 const path = require('path');
 
-const todayFile = path.join(__dirname, '../data/user_today.json');
+const todayFile = path.join(__dirname, './data/user_today.json');
 
 function getTodayDate() {
   return new Date().toISOString().slice(0, 10);
