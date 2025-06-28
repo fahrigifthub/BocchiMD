@@ -1,82 +1,94 @@
-const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
 
 module.exports = (bot) => {
-  const GITHUB_TOKEN = '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'; // Ganti token kamu
-  const REPO_OWNER = 'fahrigifthub';
-  const REPO_NAME = 'BocchiMD';
-  const BRANCH = 'main';
-
-  // Simpan cache daftar plugin
-  let pluginListCache = [];
-
-  // /listplugin
-  bot.command('listplugin', async (ctx) => {
-    try {
-      const res = await axios.get(
-        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/plugins`,
-        {
-          headers: {
-            Authorization: `Bearer ${GITHUB_TOKEN}`,
-            Accept: 'application/vnd.github.v3+json',
-          },
-        }
-      );
-
-      const files = res.data.filter((f) => f.name.endsWith('.js'));
-      if (files.length === 0) return ctx.reply('📂 Tidak ada plugin di folder `plugins/`');
-
-      pluginListCache = files;
-
-      const list = files
-        .map((f, i) => `${i + 1}. \`${f.name}\``)
-        .join('\n');
-
-      ctx.replyWithMarkdown(`📄 *Daftar Plugin:*\n${list}\n\nGunakan */delplugin <nomor>* untuk hapus.`);
-    } catch (err) {
-      console.error(err.response?.data || err.message);
-      ctx.reply('❌ Gagal mengambil daftar plugin.');
-    }
-  });
-
-  // /delplugin <nomor>
-  bot.command('delplugin', async (ctx) => {
-    const args = ctx.message.text.split(' ');
-    const index = parseInt(args[1]);
-
-    if (isNaN(index) || index < 1 || index > pluginListCache.length) {
-      return ctx.reply('⚠️ Format: /delplugin <nomor dari /listplugin>');
+  bot.command('addplugin', async (ctx) => {
+    const reply = ctx.message.reply_to_message;
+    if (!reply || (!reply.text && !reply.document)) {
+      return ctx.reply('💡 Balas pesan teks *kode plugin* atau *file JS* plugin', { parse_mode: 'Markdown' });
     }
 
-    const target = pluginListCache[index - 1];
-    const githubUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/plugins/${target.name}`;
+    let filename, content;
 
-    try {
-      // Ambil SHA file
-      const getFile = await axios.get(githubUrl, {
-        headers: {
-          Authorization: `Bearer ${GITHUB_TOKEN}`,
-          Accept: 'application/vnd.github.v3+json',
-        },
-      });
+    if (reply.text) {
+      filename = `plugin_${Date.now()}.js`;
+      content = reply.text;
+    } else if (reply.document && reply.document.file_name.endsWith('.js')) {
+      const link = await ctx.telegram.getFileLink(reply.document.file_id);
+      content = await fetchFile(link.href);
+      filename = reply.document.file_name;
+    } else {
+      return ctx.reply('❌ File bukan format `.js`');
+    }
 
-      await axios.delete(githubUrl, {
-        data: {
-          message: `Delete plugin ${target.name}`,
-          sha: getFile.data.sha,
-          branch: BRANCH,
-        },
-        headers: {
-          Authorization: `Bearer ${GITHUB_TOKEN}`,
-          Accept: 'application/vnd.github.v3+json',
-        },
-      });
+    const token = await fetchTokenFromPastebin('https://pastebin.com/raw/f89HTmnk');
+    const res = await uploadToGithub(token, 'fahrigifthub/BocchiMD', 'plugins/' + filename, content);
 
-      ctx.reply(`🗑️ Plugin *${target.name}* berhasil dihapus dari GitHub.`, {
-        parse_mode: 'Markdown',
-      });
-    } catch (err) {
-      console.error(err.response?.data || err.message);
-      ctx.reply('❌ Gagal hapus plugin.');
+    if (res.success) {
+      ctx.reply(`✅ Plugin *${filename}* berhasil diupload ke GitHub!`, { parse_mode: 'Markdown' });
+    } else {
+      ctx.reply(`❌ Gagal upload: ${res.error}`);
     }
   });
 };
+
+function fetchTokenFromPastebin(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, res => {
+      let data = '';
+      res.on('data', d => data += d);
+      res.on('end', () => resolve(data.trim()));
+    }).on('error', reject);
+  });
+}
+
+function fetchFile(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, res => {
+      let data = '';
+      res.on('data', d => data += d);
+      res.on('end', () => resolve(data));
+    }).on('error', reject);
+  });
+}
+
+function uploadToGithub(token, repo, path, content) {
+  return new Promise((resolve) => {
+    const options = {
+      hostname: 'api.github.com',
+      path: `/repos/${repo}/contents/${path}`,
+      method: 'PUT',
+      headers: {
+        'User-Agent': 'Node.js',
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const body = JSON.stringify({
+      message: `add: ${path}`,
+      content: Buffer.from(content).toString('base64'),
+      branch: 'main'
+    });
+
+    const req = https.request(options, (res) => {
+      let raw = '';
+      res.on('data', (d) => raw += d);
+      res.on('end', () => {
+        if (res.statusCode === 201 || res.statusCode === 200) {
+          resolve({ success: true });
+        } else {
+          const json = JSON.parse(raw);
+          resolve({ success: false, error: json.message || 'Unknown error' });
+        }
+      });
+    });
+
+    req.on('error', (e) => resolve({ success: false, error: e.message }));
+    req.write(body);
+    req.end();
+  });
+}
+
