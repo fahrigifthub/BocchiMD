@@ -4,6 +4,7 @@ const config = require('./config');
 const CHANNEL_ID = config.FORCE_SUB_CHANNEL; 
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
 
 const todayFile = path.join(__dirname, '../data/user_today.json');
 
