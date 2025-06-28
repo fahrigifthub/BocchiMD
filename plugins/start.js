@@ -91,33 +91,42 @@ Halo ${ctx.from.first_name}, kamu harus join channel kami dulu ya untuk pakai bo
 
   // Jika grup
   if (chatType === 'supergroup' || chatType === 'group') {
-    if (!joined) {
-      try {
-        await ctx.restrictChatMember(ctx.from.id, {
-          permissions: {
-            can_send_messages: false,
-            can_send_media_messages: false,
-            can_send_other_messages: false,
-            can_add_web_page_previews: false,
-          },
-          until_date: 0 // mute selamanya
-        });
+  if (chatType === 'supergroup' || chatType === 'group') {
+  if (!joined) {
+    try {
+      const user = await ctx.telegram.getChatMember(ctx.chat.id, ctx.from.id);
+      if (['administrator', 'creator'].includes(user.status)) return next();
 
-        await ctx.reply(
-          `Halo ${ctx.from.first_name}, kamu belum join channel. Kamu di-mute dulu ya sampai kamu join.`,
-          Markup.inlineKeyboard([
-            [Markup.button.url('Join Channel', `https://t.me/FernineInformation`)],
-            [Markup.button.callback('Unmute Saya', 'check_sub')]
-          ])
-        );
-      } catch (err) {
-        console.error('Gagal mute user:', err.response?.description || err);
-      }
-      return;
+      await ctx.restrictChatMember(ctx.from.id, {
+        permissions: {
+          can_send_messages: false,
+          can_send_media_messages: false,
+          can_send_polls: false,
+          can_send_other_messages: false,
+          can_add_web_page_previews: false,
+          can_change_info: false,
+          can_invite_users: false,
+          can_pin_messages: false
+        },
+        until_date: 0 // mute selamanya
+      });
+
+      console.log(`✅ User ${ctx.from.id} berhasil di-mute`);
+
+      await ctx.reply(
+        `Halo ${ctx.from.first_name}, kamu belum join channel. Kamu di-mute dulu ya sampai kamu join.`,
+        Markup.inlineKeyboard([
+          [Markup.button.url('Join Channel', `https://t.me/${config.FORCE_SUB_CHANNEL.replace(/^@/, '')}`)],
+          [Markup.button.callback('Unmute Saya', 'check_sub')]
+        ])
+      );
+    } catch (err) {
+      console.error('❌ Gagal mute user:', err.response?.description || err.message || err);
     }
-    return next();
+    return;
   }
-
+  return next();
+} 
   return next();
 });
 
