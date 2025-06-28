@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 
-const todayFile = path.join(__dirname, '../data/user_today.json');
+const todayFile = path.join(__dirname, './data/user_today.json');
 
 function getTodayDate() {
   return new Date().toISOString().slice(0, 10);
