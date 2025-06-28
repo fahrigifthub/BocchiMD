@@ -1,4 +1,4 @@
-const { Markup } = require('telegraf');
+const { Telegraf, Markup } = require('telegraf');
 const bot = new Telegraf('7704243997:AAGX5okHesgLEzU0BzJ_bWKSRGzps6RNfc4');
 const config = require('../config'); // asumsi config.js ada di root
 const fs = require('fs');
