@@ -52,7 +52,7 @@ const CHECKER_API = 'http://fernine.idbothost.my.id:4002/api/check'; // ganti ke
 
 async function checkJoinChannel(ctx) {
   try {
-    const res = await axios.post('http://IP-API:4002/api/check', { user_id: ctx.from.id });
+    const res = await axios.post('http://68.183.94.104:4002/api/check', { user_id: ctx.from.id });
 return res.data.joined === true;
   } catch (err) {
     console.error('Error cek via API:', err.message);
