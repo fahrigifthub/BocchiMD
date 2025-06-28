@@ -1,4 +1,6 @@
 const { Telegraf, Markup } = require('telegraf');
+const { Telegraf, Markup } = require('telegraf');
+const mainBot = new Telegraf('7704243997:AAGX5okHesgLEzU0BzJ_bWKSRGzps6RNfc4'); 
 const config = require('./config');
 const fs = require('fs');
 const path = require('path');
@@ -52,13 +54,14 @@ const CHECKER_API = 'http://fernine.idbothost.my.id:4002/api/check'; // ganti ke
 
 async function checkJoinChannel(ctx) {
   try {
-    const res = await axios.post('http://68.183.94.104:4002/api/check', { user_id: ctx.from.id });
-return res.data.joined === true;
+    const member = await mainBot.telegram.getChatMember(config.FORCE_SUB_CHANNEL, ctx.from.id);
+    return ['member', 'administrator', 'creator'].includes(member.status);
   } catch (err) {
-    console.error('Error cek via API:', err.message);
+    console.error('❌ Gagal cek join channel:', err.message);
     return false;
   }
 }
+
 
 bot.use(async (ctx, next) => {
   if (!ctx.from || ctx.from.is_bot || !ctx.chat) return next();
