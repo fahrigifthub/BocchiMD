@@ -301,3 +301,4 @@ Silakan pencet tombol di bawah untuk mulai:
     }
   });
 }
+bot.launch();
