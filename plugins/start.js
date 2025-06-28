@@ -144,7 +144,7 @@ ${greeting}
           { text: "sᴜᴘᴘᴏʀᴛ", callback_data: "supportmenu" }
         ],
         [
-          { text: "🔙 ʙᴀᴄᴋ", callback_data: "maiinmenu" }
+          { text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }
         ]
       ];
     } else {
