@@ -52,7 +52,7 @@ const CHECKER_API = 'http://fernine.idbothost.my.id:4002/api/check'; // ganti ke
 
 async function checkJoinChannel(ctx) {
   try {
-    const member = await bot.telegram.getChatMember(config.FORCE_SUB_CHANNEL, ctx.from.id);
+    const member = await ctx.telegram.getChatMember(config.FORCE_SUB_CHANNEL, ctx.from.id);
     return ['member', 'administrator', 'creator'].includes(member.status);
   } catch (err) {
     console.error('❌ Gagal cek join channel:', err.message);
