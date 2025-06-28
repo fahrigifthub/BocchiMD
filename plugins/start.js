@@ -1,6 +1,6 @@
 const { Telegraf, Markup } = require('telegraf');
 const BOT_UTAMA_TOKEN = '7704243997:AAGX5okHesgLEzU0BzJ_bWKSRGzps6RNfc4'; // ganti sesuai bot utama lu
-const config = require('../config');
+const config = require('./config');
 const CHANNEL_ID = config.FORCE_SUB_CHANNEL; 
 const fs = require('fs');
 const path = require('path');
