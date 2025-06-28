@@ -4,29 +4,34 @@ const https = require('https');
 
 module.exports = (bot) => {
   bot.command('addplugin', async (ctx) => {
+    const args = ctx.message.text.split(' ');
+    const customName = args[1];
+
     const reply = ctx.message.reply_to_message;
     if (!reply || (!reply.text && !reply.document)) {
       return ctx.reply('💡 Balas pesan teks *kode plugin* atau *file JS* plugin', { parse_mode: 'Markdown' });
     }
 
-    let filename, content;
+    if (!customName || !customName.endsWith('.js')) {
+      return ctx.reply('❌ Format: /addplugin <namafile.js>');
+    }
+
+    let content;
 
     if (reply.text) {
-      filename = `plugin_${Date.now()}.js`;
       content = reply.text;
     } else if (reply.document && reply.document.file_name.endsWith('.js')) {
       const link = await ctx.telegram.getFileLink(reply.document.file_id);
       content = await fetchFile(link.href);
-      filename = reply.document.file_name;
     } else {
       return ctx.reply('❌ File bukan format `.js`');
     }
 
     const token = await fetchTokenFromPastebin('https://pastebin.com/raw/f89HTmnk');
-    const res = await uploadToGithub(token, 'fahrigifthub/BocchiMD', 'plugins/' + filename, content);
+    const res = await uploadToGithub(token, 'fahrigifthub/BocchiMD', 'plugins/' + customName, content);
 
     if (res.success) {
-      ctx.reply(`✅ Plugin *${filename}* berhasil diupload ke GitHub!`, { parse_mode: 'Markdown' });
+      ctx.reply(`✅ Plugin *${customName}* berhasil diupload ke GitHub!`, { parse_mode: 'Markdown' });
     } else {
       ctx.reply(`❌ Gagal upload: ${res.error}`);
     }
@@ -91,4 +96,3 @@ function uploadToGithub(token, repo, path, content) {
     req.end();
   });
 }
-
