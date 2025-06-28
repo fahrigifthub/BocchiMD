@@ -120,26 +120,14 @@ ${greeting}
       newButtons = [
         [
           { text: "ᴅᴏᴡɴʟᴏᴀᴅ", callback_data: "downloadmenu" },
-          { text: "ᴛᴏᴏʟs", callback_data: "toolsmenu" },
-          { text: "sᴛᴀʟᴋ", callback_data: "stalkmenu" }
+          { text: "ᴛᴏᴏʟs", callback_data: "toolsmenu" }
         ],
         [
           { text: "ɢʀᴏᴜᴘ", callback_data: "groupmenu" },
-          { text: "ᴀɪ", callback_data: "aimenu" },
-          { text: "sᴇᴀʀᴄʜ", callback_data: "searchmenu" }
+          { text: "ᴀɪ", callback_data: "aimenu" }
         ],
         [
-          { text: "ᴄᴘᴀɴᴇʟ", callback_data: "panelmenu" },
-          { text: "ᴏᴡɴᴇʀ", callback_data: "ownermenu" },
-          { text: "ғᴜɴ", callback_data: "funmenu" }
-        ],
-        [
-          { text: "ʀᴘɢ", callback_data: "rpgmenu" },
-          { text: "ᴇɴᴄ", callback_data: "encmenu" },
-          { text: "ᴀɴɪᴍᴇ", callback_data: "animemenu" }
-        ],
-        [
-          { text: "sᴜᴘᴘᴏʀᴛ", callback_data: "supportmenu" }
+          { text: "allmenu", callback_data: "semuamenu" }
         ],
         [
           { text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }
@@ -151,15 +139,8 @@ ${greeting}
         toolsmenu: '/brat\n/play\n/tourl',
         groupmenu: '/add\n/kick',
         aimenu: '/gpt4o\n/deepseek',
-        stalkmenu: '/instagramstalk\n/tiktokstalk',
         searchmenu: '/ytsearch\n/ttsearch',
-        panelmenu: '/1gb user,idtele',
-        ownermenu: '/broadcast\n/upch',
-        funmenu: '/asupan',
-        rpgmenu: '/regis',
-        encmenu: '/customenc',
-        animemenu: '/husbu',
-        supportmenu: '/donate'
+        funmenu: '/asupan'
       };
       if (menus[data]) {
         newCaption = `\`\`\`
