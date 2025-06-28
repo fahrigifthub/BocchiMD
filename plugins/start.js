@@ -1,9 +1,8 @@
 const { Telegraf, Markup } = require('telegraf');
-const mainBot = new Telegraf('7704243997:AAGX5okHesgLEzU0BzJ_bWKSRGzps6RNfc4'); 
+const bot = new Telegraf('7704243997:AAGX5okHesgLEzU0BzJ_bWKSRGzps6RNfc4'); 
 const config = require('./config');
 const fs = require('fs');
 const path = require('path');
-const bot = new Telegraf(config.botToken);
 const todayFile = path.join(__dirname, './data/user_today.json');
 
 function getTodayDate() {
@@ -53,7 +52,7 @@ const CHECKER_API = 'http://fernine.idbothost.my.id:4002/api/check'; // ganti ke
 
 async function checkJoinChannel(ctx) {
   try {
-    const member = await mainBot.telegram.getChatMember(config.FORCE_SUB_CHANNEL, ctx.from.id);
+    const member = await bot.telegram.getChatMember(config.FORCE_SUB_CHANNEL, ctx.from.id);
     return ['member', 'administrator', 'creator'].includes(member.status);
   } catch (err) {
     console.error('❌ Gagal cek join channel:', err.message);
