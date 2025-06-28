@@ -242,7 +242,8 @@ ${greeting}
         groupmenu: '/add\n/kick',
         aimenu: '/gpt4o\n/deepseek',
         searchmenu: '/ytsearch\n/ttsearch',
-        funmenu: '/asupan'
+        funmenu: '/asupan',
+        semuamenu: '/ytmp3\n/ytmp4\n/brat\n/play\n/tourl\n/add\n/kick\n/gpt4o\n/ytsearch\n/asupan'
       };
       if (menus[data]) {
         newCaption = `\`\`\`
