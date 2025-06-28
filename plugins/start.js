@@ -1,4 +1,4 @@
-const { Markup } = require('telegraf');
+const { Telegraf, Markup } = require('telegraf');
 const config = require('./config');
 const fs = require('fs');
 const path = require('path');
