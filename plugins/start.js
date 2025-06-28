@@ -97,34 +97,20 @@ Silakan pencet tombol di bawah untuk mulai:
       [{ text: "ᴏᴡɴᴇʀ", url: "https://t.me/VellzXyrine" }]
     ];
   } else if (data === 'allmenu') {
-    newCaption = `\`\`\`
-Haloo.. @${ctx.from.username || 'user'} 👋 
-${greeting}
-
-╭─────〔 Info Bot 〕
-╰────────────────╾
-╭────────────────╾
-├─▢ Nama    : Bocchi
-├─▢ Versi   : 2.0.0
-├─▢ Author  : @VellzXyrine
-├─▢ Runtime : ${uptime}
-├─▢ UserToday: ${totalToday}
-╰────────────────────────╾
-
-╭─────〔 List Menu 〕─────╮
-╰───────────────────╯
-╭────────────────────────╾
+    newCaption = `\`\`\`Bocchi
+╭───〔 Bocchi Multi - Device 〕──╾
+│  ├─ Bot Name     : Bocchi
+│  ├─ Type         : Plugins (Telegraf)
+│  ├─ Author       : @VellzXyrine
+│  └─ Version      : 2.0.0
 │
-│┌ Download    ┌ Tools
-│├ Fun         ├ Group
-│├ Ai          ├ Search
-│├ Stalk       ├ Cpanel
-│├ Owner       ├ RPG
-│└ Encrypt     └ Anime
-│
-╰────────────────────────╾
-
-
+┝────────〔 Info - Bot 〕──────╾
+│  ├─ Status       : Aktif
+│  ├─ Runtime      : ${uptime}
+│  ├─ Pengguna     : ${username}
+│  └─ User Hari Ini: ${totalToday}
+╰────────────────────────────╾
+Silakan pencet tombol di bawah untuk mulai:
 \`\`\``;
     newButtons = [
       [
