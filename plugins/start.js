@@ -95,27 +95,26 @@ module.exports = (bot) => {
 ${greeting}
 
 ╭─────────────────╮
-│              **Bocchi MD**              │
+│                     Bocchi MD                     │
 ╰─────────────────╯
-╭──────────────────╾
+╭─────────────────╾
 ├─▢ Nama    : Bocchi
 ├─▢ Versi   : 1.0.0
 ├─▢ Author  : @VellzXyrine
 ├─▢ Runtime : ${uptime}
 ├─▢ UserToday : ${totalToday}
-╰──────────────────╾
-
+╰─────────────────╾
 ╭─────────────────╮
-│              **List Menu**              │
+│                       List Menu                    │
 ╰─────────────────╯
 ╭──────────────────╾
 │
 │┌ Download    ┌ Tools
-│├ Fun         ├ Group
-│├ Ai          ├ Search
-│├ Stalk       ├ Cpanel
-│├ Owner       ├ RPG
-│└ Encrypt     └ Anime
+│├ Fun              ├ Group
+│├ Ai                 ├ Search
+│├ Stalk            ├ Cpanel
+│├ Owner         ├ RPG
+│└ Encrypt        └ Anime
 │
 ╰──────────────────╾`;
       newButtons = [
