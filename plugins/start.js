@@ -230,8 +230,7 @@ ${greeting}
 ╰────────────────╾
 \`\`\``;
     newButtons = [[{ text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }]];
-  }
-    else if (data === 'ownermenu') {
+  } else if (data === 'ownermenu') {
     newCaption = `\`\`\`
 ╭─〔 Owner Menu 〕
 ╰────────────────╾
@@ -243,8 +242,7 @@ ${greeting}
 ╰────────────────╾
 \`\`\``;
     newButtons = [[{ text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }]];
-  }
-else if (data === 'funmenu') {
+  } else if (data === 'funmenu') {
     newCaption = `\`\`\`
 ╭─〔 Fun Menu 〕
 ╰────────────────╾
@@ -289,7 +287,6 @@ else if (data === 'funmenu') {
 \`\`\``;
 
     newButtons = [[{ text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }]];
-
   } else if (data === 'supportmenu') {
     newCaption = `\`\`\`
 ╭─〔 Support Owner 〕
@@ -301,9 +298,7 @@ else if (data === 'funmenu') {
 ╰────────────────╾
 \`\`\``;
     newButtons = [[{ text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }]];
-  } 
-
-  try {
+  } try {
     await ctx.editMessageCaption(caption, {
       parse_mode: 'Markdown',
       reply_markup: {
