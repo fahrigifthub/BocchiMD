@@ -2,7 +2,7 @@ const { Markup } = require('telegraf');
 const config = require('./config');
 const fs = require('fs');
 const path = require('path');
-
+const bot = new Telegraf(config.botToken);
 const todayFile = path.join(__dirname, './data/user_today.json');
 
 function getTodayDate() {
