@@ -61,67 +61,64 @@ async function checkJoinChannel(ctx) {
 }
 
 
+// Middleware untuk PRIVATE chat
 bot.use(async (ctx, next) => {
-  if (!ctx.from || ctx.from.is_bot || !ctx.chat) return next();
+  if (ctx.chat?.type !== 'private') return next();
 
-  // Bypass kalau pesan dari linked channel
-  if (ctx.message?.sender_chat?.type === 'channel') return next();
-
-  const chatType = ctx.chat.type;
   const joined = await checkJoinChannel(ctx);
-
-  // Jika private
-  if (chatType === 'private') {
-    if (!joined) {
-      const text = `
+  if (!joined) {
+    return ctx.replyWithPhoto('https://files.catbox.moe/kkl2ly.jpg', {
+      caption: `
 \`\`\`
 Halo ${ctx.from.first_name}, kamu harus join channel kami dulu ya untuk pakai bot ini.
 \`\`\`
-      `;
-      return ctx.replyWithPhoto('https://files.catbox.moe/kkl2ly.jpg', {
-        caption: text,
-        parse_mode: 'Markdown',
-        ...Markup.inlineKeyboard([
-          Markup.button.url('Join Channel', `https://t.me/FernineInformation`)
-        ])
-      });
-    }
-    return next();
+      `,
+      parse_mode: 'Markdown',
+      ...Markup.inlineKeyboard([
+        Markup.button.url('Join Channel', `https://t.me/${config.FORCE_SUB_CHANNEL.replace(/^@/, '')}`)
+      ])
+    });
   }
 
-  // Jika grup
-  if (chatType === 'supergroup' || chatType === 'group') {
-  if (!joined) {
-    try {
-      const user = await ctx.telegram.getChatMember(ctx.chat.id, ctx.from.id);
-      if (['administrator', 'creator'].includes(user.status)) return next();
+  return next();
+});
 
-      await ctx.restrictChatMember(ctx.from.id, {
-        permissions: {
-          can_send_messages: false,
-          can_send_media_messages: false,
-          can_send_polls: false,
-          can_send_other_messages: false,
-          can_add_web_page_previews: false,
-          can_change_info: false,
-          can_invite_users: false,
-          can_pin_messages: false
-        },
-        until_date: 0 // mute selamanya
-      });
+// Middleware untuk GROUP chat
+bot.use(async (ctx, next) => {
+  if (!['group', 'supergroup'].includes(ctx.chat?.type)) return next();
 
-      console.log(`✅ User ${ctx.from.id} berhasil di-mute`);
+  const joined = await checkJoinChannel(ctx);
+  if (joined) return next();
 
-      await ctx.reply(
-        `Halo ${ctx.from.first_name}, kamu belum join channel. Kamu di-mute dulu ya sampai kamu join.`,
-        Markup.inlineKeyboard([
-          [Markup.button.url('Join Channel', `https://t.me/${config.FORCE_SUB_CHANNEL.replace(/^@/, '')}`)],
-          [Markup.button.callback('Unmute Saya', 'check_sub')]
-        ])
-      );
-    } catch (err) {
-      console.error('❌ Gagal mute user:', err.response?.description || err.message || err);
-    }
+  try {
+    const user = await ctx.telegram.getChatMember(ctx.chat.id, ctx.from.id);
+    if (['administrator', 'creator'].includes(user.status)) return next();
+
+    await ctx.restrictChatMember(ctx.from.id, {
+      permissions: {
+        can_send_messages: false,
+        can_send_media_messages: false,
+        can_send_polls: false,
+        can_send_other_messages: false,
+        can_add_web_page_previews: false,
+        can_change_info: false,
+        can_invite_users: false,
+        can_pin_messages: false
+      },
+      until_date: 0
+    });
+
+    await ctx.reply(
+      `Halo ${ctx.from.first_name}, kamu belum join channel. Kamu di-mute dulu ya sampai kamu join.`,
+      Markup.inlineKeyboard([
+        [Markup.button.url('Join Channel', `https://t.me/${config.FORCE_SUB_CHANNEL.replace(/^@/, '')}`)],
+        [Markup.button.callback('Unmute Saya', 'check_sub')]
+      ])
+    );
+  } catch (err) {
+    console.error('Gagal mute user:', err.response?.description || err.message || err);
+  }
+
     return;
   }
   return next();
