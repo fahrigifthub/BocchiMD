@@ -1,6 +1,6 @@
 const { Markup } = require('telegraf');
 const config = require('./config'); // token & FORCE_SUB_CHANNEL di sini
-const { getUptime, getGreeting, getUserTodayCount, logUserToday } = require('../lib/functions'); // sesuaikan path
+const { getUptime, getGreeting, getUserTodayCount, logUserToday } = require('./lib/function'); // sesuaikan path
 
 module.exports = (bot) => {
   bot.start(async (ctx) => {
