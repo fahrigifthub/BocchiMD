@@ -96,7 +96,6 @@ Silakan pencet tombol di bawah untuk mulai:
       [{ text: "ᴍᴇɴᴜ", callback_data: "allmenu" }],
       [{ text: "ᴏᴡɴᴇʀ", url: "https://t.me/VellzXyrine" }]
     ];
-  }
   } else if (data === 'allmenu') {
     newCaption = `\`\`\`
 Haloo.. @${ctx.from.username || 'user'} 👋 
