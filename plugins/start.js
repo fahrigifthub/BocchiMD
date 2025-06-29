@@ -308,7 +308,7 @@ async function sendStartMenu(ctx) {
 │  ┠─ ID                 : \`${userId}\`
 │  ┕─ User Today   : ${total}
 ┣─────────────╾
-│   \_\_Since 2025 to 20??\_\_
+│   __Since 2025 to 20??__
 ┗─────────────╾`;
 
   await ctx.replyWithVideo('https://files.catbox.moe/hgioyp.mp4', {
