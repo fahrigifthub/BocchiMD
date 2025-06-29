@@ -1,6 +1,16 @@
 const { Markup } = require('telegraf');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');  
+const moment = require("moment-timezone");
+const totalMem = (os.totalmem() / 1024 / 1024).toFixed(2);
+const freeMem = (os.freemem() / 1024 / 1024).toFixed(2);
+const usedMem = (totalMem - freeMem).toFixed(2);
+const cpuLoad = os.loadavg()[0].toFixed(2);
+const platform = `${os.platform()} ${os.arch()}`;
+const vpsUptime = os.uptime();
+const formattedVps = moment.duration(vpsUptime, "seconds");
+const vpsUpText = `${formattedVps.days()}d ${formattedVps.hours()}h ${formattedVps.minutes()}m`;
 
 // File penyimpanan user hari ini
 const todayFile = path.join(__dirname, './data/user_today.json');
@@ -54,6 +64,7 @@ module.exports = (bot) => {
   bot.action(/.*/, async (ctx) => {
     const data = ctx.callbackQuery.data;
     const username = ctx.from.first_name || 'User';
+    const UserId = ctx.from.id;
     const uptime = getUptime();
     const totalToday = getUserTodayCount();
     const greeting = getGreeting();
@@ -69,11 +80,10 @@ ${greeting}
 │           Bocchi MD               │
 ╰────────────╯
 ╭────────────╾
-├─▢ Nama    : Bocchi
-├─▢ Versi   : 1.0.0
-├─▢ Author  : @VellzXyrine
-├─▢ Runtime : ${uptime}
-├─▢ UserToday : ${totalToday}
+│  ┍─ *Platform*       : ${platform}
+│  ┠─ *CPU Load*     : ${cpuLoad}
+│  ┠─ *VPS Uptime* : ${vpsUpText}
+│  ┕─ *RAM*           : ${usedMem} MB / ${totalMem} MB
 ╰────────────╾
 ╭────────────╮
 │            List Menu              │
@@ -94,10 +104,10 @@ ${greeting}
           { text: "ᴀɪ", callback_data: "aimenu" }
         ],
         [
-          { text: "allmenu", callback_data: "semuamenu" }
+          { text: "ᴀʟʟᴍᴇɴᴜ", callback_data: "semuamenu" }
         ],
         [
-          { text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }
+          { text: "🔙 ʙᴀᴄᴋ", callback_data: "mainmenu" }
         ]
       ];
     } else if (data === 'downloadmenu') {
@@ -164,17 +174,22 @@ ${greeting}
 │
 ╰────────────────╾`;
     newButtons = [[{ text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }]];
-  } else if (data === 'searchmenu') {
-    newCaption = `\`\`\`
-╭─〔 Search Menu 〕
-╰────────────────╾
-╭────────────────╾
-│
-├ /ytsearch
-├ /ttsearch
-│
-╰────────────────╾
-\`\`\``;
+  } else if (data === 'mainmenu') {
+    newCaption = `┏─────────────╾
+┃             *Bocchi MD*
+┣─────────────╾
+│  ┍─ Bot Name      : Bocchi  
+│  ┠─ Framework    : Telegraf
+│  ┠─ Author           : @VellzXyrine
+│  ┕─ Version          : 1.0 Free 
+┝─────────────╾
+│  ┍─ Runtime       : ${uptime}
+│  ┠─ User             : \`${name}\`
+│  ┠─ ID                 : \`${UserId}\`
+│  ┕─ User Today   : ${totalToday}
+┣─────────────╾
+│   \_\_Since 2025 to 20??\_\_
+┗─────────────╾`;
     newButtons = [[{ text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }]];
   } else if (data === 'panelmenu') {
     newCaption = `\`\`\`
@@ -274,16 +289,6 @@ else if (data === 'funmenu') {
 };
 
 async function sendStartMenu(ctx) {
-  const os = require('os');
-  const moment = require("moment-timezone");
-  const totalMem = (os.totalmem() / 1024 / 1024).toFixed(2);
-  const freeMem = (os.freemem() / 1024 / 1024).toFixed(2);
-  const usedMem = (totalMem - freeMem).toFixed(2);
-  const cpuLoad = os.loadavg()[0].toFixed(2);
-  const platform = `${os.platform()} ${os.arch()}`;
-  const vpsUptime = os.uptime();
-  const formattedVps = moment.duration(vpsUptime, "seconds");
-  const vpsUpText = `${formattedVps.days()}d ${formattedVps.hours()}h ${formattedVps.minutes()}m`;
   const name = ctx.from.first_name || 'User';
   const userId = ctx.from.id;
   const uptime = getUptime();
