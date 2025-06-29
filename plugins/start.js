@@ -66,7 +66,7 @@ module.exports = (bot) => {
 ${greeting}
 
 ╭────────────╮
-│           Bocchi MD                     │
+│           Bocchi MD               │
 ╰────────────╯
 ╭────────────╾
 ├─▢ Nama    : Bocchi
@@ -76,14 +76,14 @@ ${greeting}
 ├─▢ UserToday : ${totalToday}
 ╰────────────╾
 ╭────────────╮
-│            List Menu                    │
+│            List Menu              │
 ╰────────────╯
 ╭────────────╾
 │
 │┌ Download    ┌ Tools
 │└ Ai               └ Group               
 │
-╰───────────╾`;
+╰────────────╾`;
       newButtons = [
         [
           { text: "ᴅᴏᴡɴʟᴏᴀᴅ", callback_data: "downloadmenu" },
@@ -102,7 +102,7 @@ ${greeting}
       ];
     } else if (data === 'downloadmenu') {
     newCaption = `╭────────────╮
-│        Download Menu      │
+│        Download Menu       │
 ╰────────────╯
 
 ╭────────────────╾
@@ -114,7 +114,7 @@ ${greeting}
     newButtons = [[{ text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }]];
   } else if (data === 'toolsmenu') {
     newCaption = `╭────────────╮
-│         Tools Menu        │
+│            Tools Menu           │
 ╰────────────╯
 ╭────────────────╾
 │
@@ -274,25 +274,35 @@ else if (data === 'funmenu') {
 };
 
 async function sendStartMenu(ctx) {
+  const os = require('os');
+  const usedMem = (process.memoryUsage().rss / 1024 / 1024).toFixed(0); // MB
+  const cpuLoad = os.loadavg()[0].toFixed(2);
+  const platform = `${os.platform()} ${os.arch()}`;
   const name = ctx.from.first_name || 'User';
+  const userId = ctx.from.id;
   const uptime = getUptime();
   const total = getUserTodayCount();
 
-  const caption = `\`\`\`Bocchi
-╭───〔 Bocchi Multi - Device 〕──╾
-│  ├─ Bot Name     : Bocchi
-│  ├─ Type         : Plugins (Telegraf)
-│  ├─ Author       : @VellzXyrine
-│  └─ Version      : 2.0.0
-│
-┝────────〔 Info - Bot 〕──────╾
-│  ├─ Status       : Aktif
-│  ├─ Runtime      : ${uptime}
-│  ├─ Pengguna     : ${name}
-│  └─ User Hari Ini: ${total}
-╰────────────────────────────╾
-Silakan pencet tombol di bawah untuk mulai:
-\`\`\``;
+  const caption = `
+┏─────────────╾
+┃     Bocchi MD
+┣─────────────╾
+│  ┍─ Bot Name     : Bocchi
+│  ┠─ Framework    : Telegraf
+│  ┠─ Author       : @VellzXyrine
+│  ┕─ Version      : Free 
+┝────────────╾
+│  ┍─ Status       : Aktif
+│  ┠─ Runtime      : ${uptime}
+│  ┠─ Pengguna     : \`${name}\`
+│  ┠─ ID           : \`${userId}\`
+│  ┕─ User Hari Ini: ${total}
+┣─────────────╾
+│  ┍─ Platform     : ${platform}
+│  ┠─ CPU Load     : ${cpuLoad}
+│  ┕─ RAM Digunakan: ${usedMem} MB
+┗─────────────────╾
+Silakan pencet tombol di bawah untuk mulai:`;
 
   await ctx.replyWithVideo('https://files.catbox.moe/hgioyp.mp4', {
     caption,
