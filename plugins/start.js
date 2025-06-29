@@ -184,11 +184,11 @@ ${greeting}
 │  ┕─ Version          : 1.0 Free 
 ┝─────────────╾
 │  ┍─ Runtime       : ${uptime}
-│  ┠─ User             : \`${name}\`
+│  ┠─ User             : \`${username}\`
 │  ┠─ ID                 : \`${UserId}\`
 │  ┕─ User Today   : ${totalToday}
 ┣─────────────╾
-│   \_\_Since 2025 to 20??\_\_
+│   __Since 2025 to 20??__
 ┗─────────────╾`;
     newButtons = [[{ text: "🔙 ʙᴀᴄᴋ", callback_data: "allmenu" }]];
   } else if (data === 'panelmenu') {
