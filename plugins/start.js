@@ -291,25 +291,20 @@ async function sendStartMenu(ctx) {
 
   const caption = `
 ┏─────────────╾
-┃     *Bocchi MD*
+┃             *Bocchi MD*
 ┣─────────────╾
-│  ┍─ Bot Name     : Bocchi  
+│  ┍─ Bot Name      : Bocchi  
 │  ┠─ Framework    : Telegraf
-│  ┠─ Author       : @VellzXyrine
-│  ┕─ Version      : Stable - Free 
-┝────────────╾
-│  ┍─ Status       : Aktif
-│  ┠─ Runtime      : ${uptime}
-│  ┠─ Pengguna     : \`${name}\`
-│  ┠─ ID           : \`${userId}\`
-│  ┕─ User Hari Ini: ${total}
+│  ┠─ Author           : @VellzXyrine
+│  ┕─ Version          : 1.0 Free 
+┝─────────────╾
+│  ┍─ Runtime       : ${uptime}
+│  ┠─ User             : \`${name}\`
+│  ┠─ ID                 : \`${userId}\`
+│  ┕─ User Today   : ${total}
 ┣─────────────╾
-│  ┍─ Platform     : ${platform}
-│  ┠─ CPU Load     : ${cpuLoad}
-│  ┠─ *VPS Uptime* : ${vpsUpText}
-│  ┕─ *RAM*        : ${usedMem} MB / ${totalMem} MB
-┗─────────────────╾
-Silakan pencet tombol di bawah untuk mulai:`;
+│   \_\_Since 2025 to 20??\_\_
+┗─────────────╾`;
 
   await ctx.replyWithVideo('https://files.catbox.moe/hgioyp.mp4', {
     caption,
