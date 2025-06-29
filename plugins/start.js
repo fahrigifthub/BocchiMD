@@ -275,9 +275,15 @@ else if (data === 'funmenu') {
 
 async function sendStartMenu(ctx) {
   const os = require('os');
-  const usedMem = (process.memoryUsage().rss / 1024 / 1024).toFixed(0); // MB
+  const moment = require("moment-timezone");
+  const totalMem = (os.totalmem() / 1024 / 1024).toFixed(2);
+  const freeMem = (os.freemem() / 1024 / 1024).toFixed(2);
+  const usedMem = (totalMem - freeMem).toFixed(2);
   const cpuLoad = os.loadavg()[0].toFixed(2);
   const platform = `${os.platform()} ${os.arch()}`;
+  const vpsUptime = os.uptime();
+  const formattedVps = moment.duration(vpsUptime, "seconds");
+  const vpsUpText = `${formattedVps.days()}d ${formattedVps.hours()}h ${formattedVps.minutes()}m`;
   const name = ctx.from.first_name || 'User';
   const userId = ctx.from.id;
   const uptime = getUptime();
@@ -285,12 +291,12 @@ async function sendStartMenu(ctx) {
 
   const caption = `
 ┏─────────────╾
-┃     Bocchi MD
+┃     *Bocchi MD*
 ┣─────────────╾
-│  ┍─ Bot Name     : Bocchi
+│  ┍─ Bot Name     : Bocchi  
 │  ┠─ Framework    : Telegraf
 │  ┠─ Author       : @VellzXyrine
-│  ┕─ Version      : Free 
+│  ┕─ Version      : Stable - Free 
 ┝────────────╾
 │  ┍─ Status       : Aktif
 │  ┠─ Runtime      : ${uptime}
@@ -300,7 +306,8 @@ async function sendStartMenu(ctx) {
 ┣─────────────╾
 │  ┍─ Platform     : ${platform}
 │  ┠─ CPU Load     : ${cpuLoad}
-│  ┕─ RAM Digunakan: ${usedMem} MB
+│  ┠─ *VPS Uptime* : ${vpsUpText}
+│  ┕─ *RAM*        : ${usedMem} MB / ${totalMem} MB
 ┗─────────────────╾
 Silakan pencet tombol di bawah untuk mulai:`;
 
