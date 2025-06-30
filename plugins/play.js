@@ -1,45 +1,62 @@
-const axios = require("axios");
-const { default: fetch } = require("node-fetch");
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
 
 module.exports = (bot) => {
-  bot.command("play", async (ctx) => {
-    const query = ctx.message.text.split(" ").slice(1).join(" ");
+  bot.command('play', async (ctx) => {
+    try {
+      const query = ctx.message.text.split(' ').slice(1).join(' ');
 
-    if (!query) {
-      return ctx.reply("❌ Harap masukkan judul lagu. Contoh: /play Akhir tak bahagia");
-    }
+      if (!query) {
+        return ctx.reply('⚠️ Ketik judul lagu. Contoh: /play Akhir Tak Bahagia');
+      }
 
-    try {
-      const url = `https://api.kenshiro.cfd/api/downloader/play?q=${encodeURIComponent(query)}`;
-      const res = await axios.get(url);
-      const data = res.data;
+      await ctx.reply(`🔍 Mencari lagu: *${query}* ...`, { parse_mode: 'Markdown' });
 
-      if (!data.status || !data.data || !data.data.downloadLink) {
-        return ctx.reply("❌ Gagal mengambil data. Coba judul lain.");
-      }
+      // Search lagu
+      const searchRes = await axios.get(`https://api-simplebot.vercel.app/search/spotify?apikey=free&q=${encodeURIComponent(query)}`);
+      const results = searchRes.data.result;
 
-      const song = data.data;
+      if (!results || results.length === 0) {
+        return ctx.reply('❌ Lagu tidak ditemukan.');
+      }
 
-      ctx.reply("⏳ Sedang mengunduh lagu...");
+      const lagu = results[0];
 
-      const response = await fetch(song.downloadLink);
+      // Download lagu
+      const dlRes = await axios.get(`https://api-simplebot.vercel.app/download/spotify?apikey=free&url=${encodeURIComponent(lagu.url)}`);
+      const audioUrl = dlRes.data.result.url;
 
-      if (!response.ok) throw new Error("Gagal unduh file MP3");
+      const filename = `${lagu.title.replace(/[^\w\s]/gi, '')}.mp3`;
+      const filePath = path.join(__dirname, filename);
+      const writer = fs.createWriteStream(filePath);
 
-      const audioBuffer = await response.buffer();
+      const response = await axios({
+        url: audioUrl,
+        method: 'GET',
+        responseType: 'stream',
+        httpsAgent: new https.Agent({ rejectUnauthorized: false })
+      });
 
-      await ctx.replyWithAudio(
-        { source: audioBuffer, filename: song.filename || `${song.title}.mp3` },
-        {
-          title: song.title,
-          performer: song.channel,
-          duration: parseInt(song.duration),
-        }
-      );
+      response.data.pipe(writer);
 
-    } catch (err) {
-      console.error(err);
-      ctx.reply("🚫 Gagal mengambil atau mengirim lagu. Coba lagi nanti.");
-    }
-  });
+      writer.on('finish', async () => {
+        await ctx.replyWithAudio({ source: fs.createReadStream(filePath), filename }, {
+          title: lagu.title,
+          performer: lagu.artist
+        });
+        fs.unlinkSync(filePath); // Hapus file
+      });
+
+      writer.on('error', (err) => {
+        console.error(err);
+        ctx.reply('❌ Gagal unduh audio.');
+      });
+
+    } catch (err) {
+      console.error(err);
+      ctx.reply('❌ Terjadi error.');
+    }
+  });
 };
